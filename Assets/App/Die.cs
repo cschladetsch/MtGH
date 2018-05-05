@@ -81,9 +81,11 @@ public class Die :  MonoBehaviour
         }
     }
 
+    private bool CanInteract { get { return !rolling && !stopped; } }
+
     void OnMouseDown()
     {
-        if (rolling || stopped)
+        if (!CanInteract)
             return;
 
         screenPoint = Camera.main.WorldToScreenPoint(gameObject.transform.position);
@@ -92,6 +94,9 @@ public class Die :  MonoBehaviour
 
     void OnMouseDrag()
     {
+        if (!CanInteract)
+            return;
+
         lastScreenPoint = screenPoint;
         screenPoint = new Vector3(Input.mousePosition.x, Input.mousePosition.y, screenPoint.z);
         velocity = screenPoint - lastScreenPoint;
@@ -101,6 +106,9 @@ public class Die :  MonoBehaviour
 
     void OnMouseUp()
     {
+        if (!CanInteract)
+            return;
+
         var unitVel = UnitVel;
         var force = unitVel * velocity;
         force.z *= -1.5f;
@@ -108,8 +116,6 @@ public class Die :  MonoBehaviour
         force.x = Mathf.Min(100000.0f, force.x);
         force.y = Mathf.Min(100000.0f, force.y);
         force.z = Mathf.Min(100000.0f, force.z);
-        //_rb.AddForce(force.x, force.y, force.z, ForceMode.
-        //_rb.AddRelativeForce(force);
 	    _rb.isKinematic = false;
         _rb.AddForce(force, ForceMode.Force);
         rolling = true;
@@ -118,20 +124,14 @@ public class Die :  MonoBehaviour
 
     private Rigidbody _rb;
     private float startHeight;
-
     private Vector3 offset;
-
     private Vector3 screenPoint;
     private Vector3 lastScreenPoint;
     private Vector3 velocity;
-
     private float rotationSeekTime;
     private float rotationSeekRate;
     private Quaternion rotationSeek;
-
     private bool rolling = false;
     private bool stopped = false;
-
     private bool letGo = false;
-
 }

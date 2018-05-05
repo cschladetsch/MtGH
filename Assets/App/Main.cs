@@ -21,6 +21,9 @@ class Main : MonoBehaviour
 
     void Start()
     {
+        Screen.sleepTimeout = 0;
+        Screen.sleepTimeout = SleepTimeout.NeverSleep;
+
         ScoresPanel.SetActive(true);
         MenuPanel.SetActive(false);
 
