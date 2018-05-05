@@ -1,11 +1,5 @@
-﻿using System;
-using System.Linq;
-using System.Collections;
-using System.Collections.Generic;
-
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.Assertions;
 
 class Main : MonoBehaviour
 {
@@ -83,9 +77,6 @@ class Main : MonoBehaviour
 
     void UpdateMusicMenuText()
     {
-        if (_audioSource.isPlaying)
-            MusicText.text = "Stop Music";
-        else
-            MusicText.text = "Play Music";
+        MusicText.text = _audioSource.isPlaying ? "Stop Music" : "Play Music";
     }
 }

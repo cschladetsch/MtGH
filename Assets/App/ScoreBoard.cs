@@ -1,11 +1,6 @@
-﻿using System;
-using System.Linq;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.Assertions;
 
 class ScoreBoard : MonoBehaviour
 {
@@ -58,3 +53,4 @@ class ScoreBoard : MonoBehaviour
         UpdateScore();
     }
 }
+
