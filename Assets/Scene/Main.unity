@@ -311,8 +311,8 @@ MonoBehaviour:
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
     m_Font: {fileID: 12800000, guid: ae9d231fd72dc7a45af9a68e1b1c3665, type: 3}
-    m_FontSize: 121
-    m_FontStyle: 0
+    m_FontSize: 131
+    m_FontStyle: 1
     m_BestFit: 0
     m_MinSize: 0
     m_MaxSize: 186
@@ -1320,7 +1320,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &462636511
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1837,8 +1837,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 15.214966, y: -19.849976}
-  m_SizeDelta: {x: 29.75, y: -2.4999943}
+  m_AnchoredPosition: {x: 8.019983, y: -10.699988}
+  m_SizeDelta: {x: 15.360034, y: 15.799976}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &619178022
 MonoBehaviour:
@@ -1861,8 +1861,8 @@ MonoBehaviour:
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
     m_Font: {fileID: 12800000, guid: ae9d231fd72dc7a45af9a68e1b1c3665, type: 3}
-    m_FontSize: 117
-    m_FontStyle: 0
+    m_FontSize: 131
+    m_FontStyle: 1
     m_BestFit: 0
     m_MinSize: 0
     m_MaxSize: 186
@@ -2986,7 +2986,6 @@ MonoBehaviour:
   Score: 20
   ScoreText: {fileID: 2032652897}
   PlusClips:
-  - {fileID: 8300000, guid: dbaa3d6c3ae677c4d9b0d98cd4142ece, type: 3}
   - {fileID: 8300000, guid: d954e94d94477154f8f04c15ee8e51d1, type: 3}
   MinusClips:
   - {fileID: 8300000, guid: b1480246231aff443b2cb2c073e61fc9, type: 3}
@@ -3580,8 +3579,8 @@ MonoBehaviour:
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
     m_Font: {fileID: 12800000, guid: ae9d231fd72dc7a45af9a68e1b1c3665, type: 3}
-    m_FontSize: 117
-    m_FontStyle: 0
+    m_FontSize: 131
+    m_FontStyle: 1
     m_BestFit: 0
     m_MinSize: 0
     m_MaxSize: 186
@@ -5241,7 +5240,6 @@ MonoBehaviour:
   Score: 20
   ScoreText: {fileID: 801727066}
   PlusClips:
-  - {fileID: 8300000, guid: dbaa3d6c3ae677c4d9b0d98cd4142ece, type: 3}
   - {fileID: 8300000, guid: d954e94d94477154f8f04c15ee8e51d1, type: 3}
   MinusClips:
   - {fileID: 8300000, guid: b1480246231aff443b2cb2c073e61fc9, type: 3}
@@ -5768,8 +5766,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 15.214966, y: -19.849976}
-  m_SizeDelta: {x: 29.75, y: -2.4999943}
+  m_AnchoredPosition: {x: 8.019983, y: -10.699988}
+  m_SizeDelta: {x: 15.360034, y: 15.799976}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2057082292
 MonoBehaviour:
@@ -5792,8 +5790,8 @@ MonoBehaviour:
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
     m_Font: {fileID: 12800000, guid: ae9d231fd72dc7a45af9a68e1b1c3665, type: 3}
-    m_FontSize: 121
-    m_FontStyle: 0
+    m_FontSize: 131
+    m_FontStyle: 1
     m_BestFit: 0
     m_MinSize: 0
     m_MaxSize: 186

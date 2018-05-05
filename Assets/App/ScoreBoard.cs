@@ -29,6 +29,7 @@ class ScoreBoard : MonoBehaviour
 
     private void PlayRandom(IList<AudioClip> clips)
     {
+        _audioSource.pitch = UnityEngine.Random.Range(0.95f, 1.0f);
         _audioSource.PlayOneShot(SelectRandom(clips));
     }
 
