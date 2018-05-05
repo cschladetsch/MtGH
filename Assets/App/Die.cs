@@ -7,37 +7,9 @@ public class Die :  MonoBehaviour
 	void Start()
 	{
 	    _rb = GetComponent<Rigidbody>();
-
-        startHeight = transform.position.z;
 	    startPos = transform.position;
-
 	    Reset();
 	}
-
-    private Vector3 startPos;
-
-    void Reset()
-    {
-	    _rb.isKinematic = true;
-        _rb.freezeRotation = false;
-        _rb.velocity = Vector3.zero;
-
-        transform.position = startPos;
-	    transform.rotation = Random.rotationUniform;
-
-	    rolling = false;
-	    stopped = false;
-        letGo = false;
-
-        NewRotationSeek();
-    }
-
-    void NewRotationSeek()
-    {
-        rotationSeek = Random.rotationUniform;
-        rotationSeekRate = Random.Range(1.5f, 3.5f);
-        rotationSeekTime = Random.Range(1, 2);
-    }
 
     void Update()
     {
@@ -57,31 +29,62 @@ public class Die :  MonoBehaviour
         if (stopped)
             return;
 
-        if (!rolling)
-        {
-            rotationSeekTime -= Time.deltaTime;
-            if (rotationSeekTime < 0)
-                NewRotationSeek();
-
-            transform.rotation = Quaternion.Slerp(transform.rotation, rotationSeek, rotationSeekRate*Time.deltaTime);
+        if (AutoRotate())
             return;
-        }
 
-        var v = _rb.velocity.magnitude;
-        var r = _rb.angularVelocity.magnitude;
-
-        if (v < 0.01f && r < 0.01f)
-        {
-            Debug.Log("Stopped roll");
-            rolling = false;
-            stopped = true;
-            _rb.velocity = Vector3.zero;
-            _rb.freezeRotation = true;
-            _rb.isKinematic = true;
-        }
+        TestStationary();
     }
 
-    private bool CanInteract { get { return !rolling && !stopped; } }
+    void Reset()
+    {
+	    _rb.isKinematic = true;
+        _rb.freezeRotation = false;
+        _rb.velocity = Vector3.zero;
+
+        transform.position = startPos;
+	    transform.rotation = Random.rotationUniform;
+
+	    rolling = false;
+	    stopped = false;
+        letGo = false;
+
+        NewRotationTarget();
+    }
+
+    void NewRotationTarget()
+    {
+        rotationSeek = Random.rotationUniform;
+        rotationSeekRate = Random.Range(1.5f, 3.5f);
+        rotationSeekTime = Random.Range(1, 2);
+    }
+
+    private bool AutoRotate()
+    {
+        if (rolling)
+            return false;
+
+        rotationSeekTime -= Time.deltaTime;
+        if (rotationSeekTime < 0)
+            NewRotationTarget();
+
+        transform.rotation = Quaternion.Slerp(transform.rotation, rotationSeek, rotationSeekRate * Time.deltaTime);
+        return true;
+    }
+
+    private void TestStationary()
+    {
+        var v = _rb.velocity.magnitude;
+        var r = _rb.angularVelocity.magnitude;
+        if (!(v < 0.01f) || !(r < 0.01f))
+            return;
+
+        Debug.Log("Stopped roll");
+        rolling = false;
+        stopped = true;
+        _rb.velocity = Vector3.zero;
+        _rb.freezeRotation = true;
+        _rb.isKinematic = true;
+    }
 
     void OnMouseDown()
     {
@@ -122,8 +125,9 @@ public class Die :  MonoBehaviour
         letGo = true;
     }
 
+    private bool CanInteract { get { return !rolling && !stopped; } }
     private Rigidbody _rb;
-    private float startHeight;
+    private Vector3 startPos;
     private Vector3 offset;
     private Vector3 screenPoint;
     private Vector3 lastScreenPoint;
