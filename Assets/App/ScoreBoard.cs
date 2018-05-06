@@ -1,16 +1,16 @@
-﻿using System;
-using System.Linq;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.Assertions;
 
+/// <summary>
+/// One or each player: shows their current health.
+/// TODO: Add PlanesWalkers for each player via a tab system.
+/// </summary>
 class ScoreBoard : MonoBehaviour
 {
-    public int Score;
-    public DropText ScoreText;
+    // yeah, Health and HealthText should be linked with a reactive observer. But meh.
+    public int Health;
+    public DropText HealthText;
     public AudioClip[] PlusClips;
     public AudioClip[] MinusClips;
     private AudioSource _audioSource;
@@ -18,17 +18,19 @@ class ScoreBoard : MonoBehaviour
     void Start()
     {
         _audioSource = GetComponent<AudioSource>();
+        Reset();
     }
 
     public void PlusPressed()
     {
-        Score += 1;
+        Health += 1;
         UpdateScore();
         PlayRandom(PlusClips);
     }
 
     private void PlayRandom(IList<AudioClip> clips)
     {
+        _audioSource.pitch = UnityEngine.Random.Range(0.95f, 1.0f);
         _audioSource.PlayOneShot(SelectRandom(clips));
     }
 
@@ -41,19 +43,19 @@ class ScoreBoard : MonoBehaviour
 
     public void MinusPressed()
     {
-        Score -= 1;
+        Health -= 1;
         UpdateScore();
         PlayRandom(MinusClips);
     }
 
     void UpdateScore()
     {
-        ScoreText.Set(Score.ToString());
+        HealthText.Set(Health.ToString());
     }
 
     public void Reset()
     {
-        Score = 20;
+        Health = 20;
         UpdateScore();
     }
 }
