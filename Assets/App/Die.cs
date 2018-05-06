@@ -3,18 +3,27 @@ using System.Collections;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-public class Die :  MonoBehaviour
+public class Die : MonoBehaviour
 {
     public float UnitVel = 1000;
     public float MaxMagnitude = 20000;
     public float MinMagnitude = 1000;
+    public AudioClip BounceClip;
+    public AudioClip ShakingClip;
+    public AudioClip FinishedClip;
+    private AudioSource _audioPlayer;
 
-	void Awake()
-	{
-	    _rb = GetComponent<Rigidbody>();
-	    startPos = transform.position;
-	    Reset();
-	}
+    void Awake()
+    {
+        _rb = GetComponent<Rigidbody>();
+        _audioPlayer = GetComponent<AudioSource>();
+        startPos = transform.position;
+        Reset();
+    }
+
+    void Start()
+    {
+    }
 
     void Update()
     {
@@ -40,8 +49,6 @@ public class Die :  MonoBehaviour
         TestStationary();
     }
 
-    Action<int> _finished;
-
     public void Roll(Action<int> finish)
     {
         gameObject.SetActive(true);
@@ -51,15 +58,19 @@ public class Die :  MonoBehaviour
 
     public void Reset()
     {
-	    _rb.isKinematic = true;
+        _rb.isKinematic = true;
         _rb.freezeRotation = false;
         _rb.velocity = Vector3.zero;
 
-        transform.position = startPos;
-	    transform.rotation = Random.rotationUniform;
+        _audioPlayer.loop = true;
+        _audioPlayer.clip = ShakingClip;
+        _audioPlayer.Play();
 
-	    rolling = false;
-	    stopped = false;
+        transform.position = startPos;
+        transform.rotation = Random.rotationUniform;
+
+        rolling = false;
+        stopped = false;
         letGo = false;
 
         NewRotationTarget();
@@ -81,7 +92,7 @@ public class Die :  MonoBehaviour
         if (rotationSeekTime < 0)
             NewRotationTarget();
 
-        transform.rotation = Quaternion.Slerp(transform.rotation, rotationSeek, rotationSeekRate*Time.deltaTime);
+        transform.rotation = Quaternion.Slerp(transform.rotation, rotationSeek, rotationSeekRate * Time.deltaTime);
         return true;
     }
 
@@ -89,7 +100,7 @@ public class Die :  MonoBehaviour
     {
         var v = _rb.velocity.magnitude;
         var r = _rb.angularVelocity.magnitude;
-        if (!(v < 0.01f) || !(r < 0.01f))
+        if (!(v < 0.1f) || !(r < 0.1f))
             return;
 
         RollFinished();
@@ -105,6 +116,8 @@ public class Die :  MonoBehaviour
         _rb.isKinematic = true;
 
         int result = 3;
+        _audioPlayer.Stop();
+        _audioPlayer.PlayOneShot(FinishedClip);
         StartCoroutine(Completed(result));
     }
 
@@ -143,6 +156,9 @@ public class Die :  MonoBehaviour
         if (!CanInteract)
             return;
 
+        _audioPlayer.loop = false;
+        _audioPlayer.Stop();
+
         var force = UnitVel * velocity;
         force.z *= -1.5f;
         Debug.Log("Initial force: " + force);
@@ -170,7 +186,16 @@ public class Die :  MonoBehaviour
         letGo = true;
     }
 
+    void OnCollisionEnter(Collision col)
+    {
+        Debug.Log("Bounc");
+        _audioPlayer.Stop();
+        _audioPlayer.PlayOneShot(BounceClip);
+    }
+
     private bool CanInteract { get { return !rolling && !stopped; } }
+    Action<int> _finished;
+
     private Rigidbody _rb;
     private Vector3 startPos;
     private Vector3 offset;
