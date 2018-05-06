@@ -12,6 +12,10 @@ It's all pretty streaight-forward. To bring up the menu, tap anywhere on the top
 
 Yeah, the names 'Saxon' and 'Dad' are hard-coded - because that is the sole usage I saw for it at the time.
 
+## Usage
+
+It's all pretty simply. To bring up the menu, tap anywhere on the top title bar.
+
 ## Note about Assets
 
 There were some large assets in Assets/Movies and Assets/Music that I excluded from the project. 
