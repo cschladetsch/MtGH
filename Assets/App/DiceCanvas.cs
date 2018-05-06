@@ -22,11 +22,13 @@ class DiceCanvas : MonoBehaviour
 
     public void Reset()
     {
+        _done = false;
         Die.Reset();
     }
 
     public void RollDie(Action<int> cb)
     {
+        Reset();
         gameObject.SetActive(true);
         _finished = cb;
         Die.Roll(Done);

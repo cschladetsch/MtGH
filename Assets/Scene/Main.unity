@@ -5220,11 +5220,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   UnitVel: 1200
-  MaxMagnitude: 100000
+  MaxMagnitude: 120000
   MinMagnitude: 10000
   BounceClip: {fileID: 8300000, guid: 04a215c348fed37499e5ddcf5e4512a7, type: 3}
   ShakingClip: {fileID: 8300000, guid: a1faaf5126885e340a35f1ea7511e53d, type: 3}
-  FinishedClip: {fileID: 8300000, guid: 495e83f99bbd4954095f295bbcc490d7, type: 3}
+  FinishedClip: {fileID: 8300000, guid: b87a42f794d8ccf4e8a7b46ec11c8900, type: 3}
 --- !u!54 &1846878056
 Rigidbody:
   m_ObjectHideFlags: 0

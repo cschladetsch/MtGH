@@ -69,6 +69,7 @@ class Main : MonoBehaviour
 
     private void RollFinished(int val)
     {
+        PlayMenuSound();
         DieCanvas.gameObject.SetActive(false);
     }
 
