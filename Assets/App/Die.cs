@@ -1,10 +1,13 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Collections;
+using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class Die :  MonoBehaviour
 {
     public int UnitVel = 1000;
 
-	void Start()
+	void Awake()
 	{
 	    _rb = GetComponent<Rigidbody>();
 	    startPos = transform.position;
@@ -35,7 +38,16 @@ public class Die :  MonoBehaviour
         TestStationary();
     }
 
-    void Reset()
+    Action<int> _finished;
+
+    public void Roll(Action<int> finish)
+    {
+        gameObject.SetActive(true);
+        Reset();
+        _finished = finish;
+    }
+
+    public void Reset()
     {
 	    _rb.isKinematic = true;
         _rb.freezeRotation = false;
@@ -67,7 +79,7 @@ public class Die :  MonoBehaviour
         if (rotationSeekTime < 0)
             NewRotationTarget();
 
-        transform.rotation = Quaternion.Slerp(transform.rotation, rotationSeek, rotationSeekRate * Time.deltaTime);
+        transform.rotation = Quaternion.Slerp(transform.rotation, rotationSeek, rotationSeekRate*Time.deltaTime);
         return true;
     }
 
@@ -78,12 +90,29 @@ public class Die :  MonoBehaviour
         if (!(v < 0.01f) || !(r < 0.01f))
             return;
 
+        RollFinished();
+    }
+
+    private void RollFinished()
+    {
         Debug.Log("Stopped roll");
         rolling = false;
         stopped = true;
         _rb.velocity = Vector3.zero;
         _rb.freezeRotation = true;
         _rb.isKinematic = true;
+
+        int result = 3;
+        StartCoroutine(Completed(result));
+    }
+
+    IEnumerator Completed(int result)
+    {
+        yield return null;
+        yield return new WaitForSeconds(3);
+        if (_finished != null)
+            _finished(result);
+        gameObject.SetActive(false);
     }
 
     void OnMouseDown()
@@ -112,13 +141,11 @@ public class Die :  MonoBehaviour
         if (!CanInteract)
             return;
 
-        var unitVel = UnitVel;
-        var force = unitVel * velocity;
+        var force = UnitVel * velocity;
         force.z *= -1.5f;
         Debug.Log("Initial force: " + force);
-        force.x = Mathf.Min(100000.0f, force.x);
-        force.y = Mathf.Min(100000.0f, force.y);
-        force.z = Mathf.Min(100000.0f, force.z);
+        force.x = Mathf.Min(10000.0f, force.x);
+        force.y = Mathf.Min(10000.0f, force.y);
 	    _rb.isKinematic = false;
         _rb.AddForce(force, ForceMode.Force);
         rolling = true;

@@ -5,6 +5,8 @@ class Main : MonoBehaviour
 {
     public GameObject ScoresPanel;
     public GameObject MenuPanel;
+    public DiceCanvas DieCanvas;
+
     public ScoreBoard Score1;
     public ScoreBoard Score2;
     public Text MusicText;
@@ -20,6 +22,7 @@ class Main : MonoBehaviour
 
         ScoresPanel.SetActive(true);
         MenuPanel.SetActive(false);
+        DieCanvas.gameObject.SetActive(false);
 
         _audioSource = GetComponent<AudioSource>();
         _audioSource.loop = true;
@@ -55,7 +58,14 @@ class Main : MonoBehaviour
     public void RollPressed()
     {
         PlayMenuSound();
-        var rand = UnityEngine.Random.Range(0, 6);
+        CloseMenu();
+        DieCanvas.gameObject.SetActive(true);
+        DieCanvas.RollDie(RollFinished);
+    }
+
+    private void RollFinished(int val)
+    {
+        DieCanvas.gameObject.SetActive(false);
     }
 
     public void BackPressed()
