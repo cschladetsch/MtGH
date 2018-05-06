@@ -5,7 +5,9 @@ using Random = UnityEngine.Random;
 
 public class Die :  MonoBehaviour
 {
-    public int UnitVel = 1000;
+    public float UnitVel = 1000;
+    public float MaxMagnitude = 20000;
+    public float MinMagnitude = 1000;
 
 	void Awake()
 	{
@@ -144,9 +146,25 @@ public class Die :  MonoBehaviour
         var force = UnitVel * velocity;
         force.z *= -1.5f;
         Debug.Log("Initial force: " + force);
-        force.x = Mathf.Min(10000.0f, force.x);
-        force.y = Mathf.Min(10000.0f, force.y);
-	    _rb.isKinematic = false;
+        var mag = force.magnitude;
+        if (mag > MaxMagnitude)
+        {
+            Debug.Log("Clipped, was " + mag);
+            force = force / mag * MaxMagnitude;
+        }
+        if (mag < MinMagnitude)
+        {
+            Debug.Log("Boosted, was " + mag);
+            if (mag < 0.01f)
+            {
+                force = Random.onUnitSphere;
+                mag = 1;
+            }
+            force = force / mag * MinMagnitude;
+        }
+        Debug.Log("Final force: " + force);
+
+        _rb.isKinematic = false;
         _rb.AddForce(force, ForceMode.Force);
         rolling = true;
         letGo = true;
