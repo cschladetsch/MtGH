@@ -2,9 +2,13 @@
 
 using UnityEngine;
 
+/// <summary>
+/// One or each player: shows their current health.
+/// TODO: Add PlanesWalkers for each player via a tab system.
+/// </summary>
 class ScoreBoard : MonoBehaviour
 {
-    public int Score;
+    public int Health;
     public DropText ScoreText;
     public AudioClip[] PlusClips;
     public AudioClip[] MinusClips;
@@ -17,7 +21,7 @@ class ScoreBoard : MonoBehaviour
 
     public void PlusPressed()
     {
-        Score += 1;
+        Health += 1;
         UpdateScore();
         PlayRandom(PlusClips);
     }
@@ -37,20 +41,19 @@ class ScoreBoard : MonoBehaviour
 
     public void MinusPressed()
     {
-        Score -= 1;
+        Health -= 1;
         UpdateScore();
         PlayRandom(MinusClips);
     }
 
     void UpdateScore()
     {
-        ScoreText.Set(Score.ToString());
+        ScoreText.Set(Health.ToString());
     }
 
     public void Reset()
     {
-        Score = 20;
+        Health = 20;
         UpdateScore();
     }
 }
-

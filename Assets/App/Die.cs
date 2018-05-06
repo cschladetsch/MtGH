@@ -3,6 +3,9 @@ using System.Collections;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
+/// <summary>
+/// Behaviour of the 3d dice roll over the 2d UGUI
+/// </summary>
 public class Die : MonoBehaviour
 {
     public float UnitVel = 1000;
@@ -11,18 +14,12 @@ public class Die : MonoBehaviour
     public AudioClip BounceClip;
     public AudioClip ShakingClip;
     public AudioClip FinishedClip;
-    private AudioSource _audioPlayer;
 
     void Awake()
     {
-        _rb = GetComponent<Rigidbody>();
+        _rigidBody = GetComponent<Rigidbody>();
         _audioPlayer = GetComponent<AudioSource>();
-        startPos = transform.position;
-        //Reset();
-    }
-
-    void Start()
-    {
+        _startPos = transform.position;
     }
 
     void Update()
@@ -34,13 +31,13 @@ public class Die : MonoBehaviour
         }
 
         // when we first let go, we apply a force, but it can take a frame to make it affect velocities
-        if (letGo)
+        if (_letGo)
         {
-            letGo = false;
+            _letGo = false;
             return;
         }
 
-        if (stopped)
+        if (_stopped)
             return;
 
         if (AutoRotate())
@@ -58,48 +55,50 @@ public class Die : MonoBehaviour
 
     public void Reset()
     {
-        _rb.isKinematic = true;
-        _rb.freezeRotation = false;
-        _rb.velocity = Vector3.zero;
+        _rigidBody.isKinematic = true;
+        _rigidBody.freezeRotation = false;
+        _rigidBody.velocity = Vector3.zero;
 
         _audioPlayer.loop = true;
         _audioPlayer.clip = ShakingClip;
         _audioPlayer.Play();
 
-        transform.position = startPos;
+        transform.position = _startPos;
         transform.rotation = Random.rotationUniform;
 
-        rolling = false;
-        stopped = false;
-        letGo = false;
+        _rolling = false;
+        _stopped = false;
+        _letGo = false;
 
         NewRotationTarget();
     }
 
     void NewRotationTarget()
     {
-        rotationSeek = Random.rotationUniform;
-        rotationSeekRate = Random.Range(1.5f, 3.5f);
-        rotationSeekTime = Random.Range(1, 2);
+        _rotationSeek = Random.rotationUniform;
+        _rotationSeekRate = Random.Range(1.5f, 3.5f);
+        _rotationSeekTime = Random.Range(1, 2);
     }
 
     private bool AutoRotate()
     {
-        if (rolling)
+        if (_rolling)
             return false;
 
-        rotationSeekTime -= Time.deltaTime;
-        if (rotationSeekTime < 0)
+        _rotationSeekTime -= Time.deltaTime;
+        if (_rotationSeekTime < 0)
             NewRotationTarget();
 
-        transform.rotation = Quaternion.Slerp(transform.rotation, rotationSeek, rotationSeekRate * Time.deltaTime);
+        transform.rotation = Quaternion.Slerp(transform.rotation, _rotationSeek, _rotationSeekRate * Time.deltaTime);
         return true;
     }
 
     private void TestStationary()
     {
-        var v = _rb.velocity.magnitude;
-        var r = _rb.angularVelocity.magnitude;
+        var v = _rigidBody.velocity.magnitude;
+        var r = _rigidBody.angularVelocity.magnitude;
+
+        // I'm leaving this here as a sign to not always rely on ReSharper for clarity
         if (!(v < 0.1f) || !(r < 0.1f))
             return;
 
@@ -109,12 +108,13 @@ public class Die : MonoBehaviour
     private void RollFinished()
     {
         Debug.Log("Stopped roll");
-        rolling = false;
-        stopped = true;
-        _rb.velocity = Vector3.zero;
-        _rb.freezeRotation = true;
-        _rb.isKinematic = true;
+        _rolling = false;
+        _stopped = true;
+        _rigidBody.velocity = Vector3.zero;
+        _rigidBody.freezeRotation = true;
+        _rigidBody.isKinematic = true;
 
+        // results aren't really used yet. It's just an indication to the players.
         int result = 3;
         _audioPlayer.Stop();
         _audioPlayer.PlayOneShot(FinishedClip);
@@ -134,8 +134,8 @@ public class Die : MonoBehaviour
         if (!CanInteract)
             return;
 
-        screenPoint = Camera.main.WorldToScreenPoint(gameObject.transform.position);
-        offset = gameObject.transform.position - Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, screenPoint.z));
+        _screenPoint = Camera.main.WorldToScreenPoint(gameObject.transform.position);
+        _startMouseOffset = gameObject.transform.position - Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, _screenPoint.z));
     }
 
     void OnMouseDrag()
@@ -143,10 +143,10 @@ public class Die : MonoBehaviour
         if (!CanInteract)
             return;
 
-        lastScreenPoint = screenPoint;
-        screenPoint = new Vector3(Input.mousePosition.x, Input.mousePosition.y, screenPoint.z);
-        velocity = screenPoint - lastScreenPoint;
-        Vector3 world = Camera.main.ScreenToWorldPoint(screenPoint) + offset;
+        _lastScreenPoint = _screenPoint;
+        _screenPoint = new Vector3(Input.mousePosition.x, Input.mousePosition.y, _screenPoint.z);
+        _velocity = _screenPoint - _lastScreenPoint;
+        Vector3 world = Camera.main.ScreenToWorldPoint(_screenPoint) + _startMouseOffset;
         transform.position = world;
     }
 
@@ -155,10 +155,7 @@ public class Die : MonoBehaviour
         if (!CanInteract)
             return;
 
-        //_audioPlayer.loop = false;
-        //_audioPlayer.Stop();
-
-        var force = UnitVel * velocity;
+        var force = UnitVel * _velocity;
         force.z *= -1.5f;
         Debug.Log("Initial force: " + force);
         var mag = force.magnitude;
@@ -167,7 +164,7 @@ public class Die : MonoBehaviour
             Debug.Log("Clipped, was " + mag);
             force = force / mag * MaxMagnitude;
         }
-        if (mag < MinMagnitude)
+        else if (mag < MinMagnitude)
         {
             Debug.Log("Boosted, was " + mag);
             if (mag < 0.01f)
@@ -179,14 +176,11 @@ public class Die : MonoBehaviour
         }
         Debug.Log("Final force: " + force);
 
-        _rb.isKinematic = false;
-        _rb.AddForce(force, ForceMode.Force);
-        rolling = true;
-        letGo = true;
+        _rigidBody.isKinematic = false;
+        _rigidBody.AddForce(force, ForceMode.Force);
+        _rolling = true;
+        _letGo = true;
     }
-
-    private float _minBounceInterval = 0.3f;
-    private float _lastBounce = 0;
 
     void OnCollisionEnter(Collision col)
     {
@@ -197,19 +191,27 @@ public class Die : MonoBehaviour
         _audioPlayer.PlayOneShot(BounceClip);
     }
 
-    private bool CanInteract { get { return !rolling && !stopped; } }
-    Action<int> _finished;
+    private bool CanInteract { get { return !_rolling && !_stopped; } }
 
-    private Rigidbody _rb;
-    private Vector3 startPos;
-    private Vector3 offset;
-    private Vector3 screenPoint;
-    private Vector3 lastScreenPoint;
-    private Vector3 velocity;
-    private float rotationSeekTime;
-    private float rotationSeekRate;
-    private Quaternion rotationSeek;
-    private bool rolling = false;
-    private bool stopped = false;
-    private bool letGo = false;
+    private Rigidbody _rigidBody;
+    private AudioSource _audioPlayer;
+    Action<int> _finished;          // invoked when the roll has finished
+    private float _minBounceInterval = 0.3f;
+    private float _lastBounce = 0;  // time of last bounce, to avoid playing too many bounce sfx
+
+    private Vector3 _startPos;
+    private Vector3 _startMouseOffset;
+    private Vector3 _screenPoint;
+    private Vector3 _lastScreenPoint;
+    private Vector3 _velocity;      // velocity at release time. has to be clamped to avoid 1. flying through colliders and 2. just dropping to a 6 or something.
+
+    // yes, these should be an enum
+    private bool _rolling = false;  // dice is currently rolling
+    private bool _stopped = false;  // dice has stopped moving
+    private bool _letGo = false;    // player has let go of the dice.
+
+    // auto-rotate dice before player lets go
+    private float _rotationSeekTime;
+    private float _rotationSeekRate;
+    private Quaternion _rotationSeek;
 }

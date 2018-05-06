@@ -1,15 +1,18 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// Main controller of the game state changes
+/// </summary>
 class Main : MonoBehaviour
 {
     public GameObject ScoresPanel;
     public GameObject MenuPanel;
     public DiceCanvas DieCanvas;
-
     public ScoreBoard Score1;
     public ScoreBoard Score2;
     public Text MusicText;
+
     public AudioClip MusicClip;
     public AudioClip MenuClip;
     public AudioClip IntroClip;
@@ -18,9 +21,11 @@ class Main : MonoBehaviour
 
     void Start()
     {
+        // you really don't want to screen to dim or the app to suspend
         Screen.sleepTimeout = 0;
         Screen.sleepTimeout = SleepTimeout.NeverSleep;
 
+        // turn off all other canvases
         ScoresPanel.SetActive(true);
         MenuPanel.SetActive(false);
         DieCanvas.gameObject.SetActive(false);
@@ -31,6 +36,7 @@ class Main : MonoBehaviour
         _audioSource.loop = true;
         _audioSource.clip = MusicClip;
         _audioSource.Play();
+
         UpdateMusicMenuText();
     }
 
@@ -48,9 +54,13 @@ class Main : MonoBehaviour
     public void RestartPressed()
     {
         PlayMenuSound();
+
+        // TODO: allow for more than two players
         Score1.Reset();
         Score2.Reset();
+
         CloseMenu();
+
         _audioSource.PlayOneShot(IntroClip);
     }
 
@@ -67,6 +77,7 @@ class Main : MonoBehaviour
         DieCanvas.RollDie(RollFinished);
     }
 
+    // we don't really care about result of rolls yet. just for player's benefit
     private void RollFinished(int val)
     {
         PlayMenuSound();
