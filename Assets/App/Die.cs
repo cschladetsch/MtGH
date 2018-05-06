@@ -124,7 +124,7 @@ public class Die : MonoBehaviour
     IEnumerator Completed(int result)
     {
         yield return null;
-        yield return new WaitForSeconds(3);
+        yield return new WaitForSeconds(1);
         if (_finished != null)
             _finished(result);
     }

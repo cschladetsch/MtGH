@@ -18,6 +18,7 @@ class ScoreBoard : MonoBehaviour
     void Start()
     {
         _audioSource = GetComponent<AudioSource>();
+        Reset();
     }
 
     public void PlusPressed()
