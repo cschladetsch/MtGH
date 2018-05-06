@@ -8,7 +8,7 @@ The main interesting technical points are use of the new VideoPlayer Unity3d cla
 
 ## Usage
 
-It's all pretty streaight-forward. To bring up the menu, tap anywhere on the top title bar.
+It's all pretty straight-forward. To bring up the menu, tap anywhere on the top title bar.
 
 Yeah, the names 'Saxon' and 'Dad' are hard-coded - because that is the sole usage I saw for it at the time.
 
