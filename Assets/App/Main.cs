@@ -10,8 +10,9 @@ class Main : MonoBehaviour
     public ScoreBoard Score1;
     public ScoreBoard Score2;
     public Text MusicText;
-    public AudioClip Music;
-    public AudioClip Menu;
+    public AudioClip MusicClip;
+    public AudioClip MenuClip;
+    public AudioClip IntroClip;
 
     private AudioSource _audioSource;
 
@@ -25,8 +26,10 @@ class Main : MonoBehaviour
         DieCanvas.gameObject.SetActive(false);
 
         _audioSource = GetComponent<AudioSource>();
+        _audioSource.PlayOneShot(IntroClip);
+
         _audioSource.loop = true;
-        _audioSource.clip = Music;
+        _audioSource.clip = MusicClip;
         _audioSource.Play();
         UpdateMusicMenuText();
     }
@@ -39,7 +42,7 @@ class Main : MonoBehaviour
 
     void PlayMenuSound()
     {
-        _audioSource.PlayOneShot(Menu);
+        _audioSource.PlayOneShot(MenuClip);
     }
 
     public void RestartPressed()
@@ -48,6 +51,7 @@ class Main : MonoBehaviour
         Score1.Reset();
         Score2.Reset();
         CloseMenu();
+        _audioSource.PlayOneShot(IntroClip);
     }
 
     void CloseMenu()

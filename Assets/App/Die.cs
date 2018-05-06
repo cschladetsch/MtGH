@@ -18,7 +18,7 @@ public class Die : MonoBehaviour
         _rb = GetComponent<Rigidbody>();
         _audioPlayer = GetComponent<AudioSource>();
         startPos = transform.position;
-        Reset();
+        //Reset();
     }
 
     void Start()
@@ -127,7 +127,6 @@ public class Die : MonoBehaviour
         yield return new WaitForSeconds(3);
         if (_finished != null)
             _finished(result);
-        gameObject.SetActive(false);
     }
 
     void OnMouseDown()
@@ -156,8 +155,8 @@ public class Die : MonoBehaviour
         if (!CanInteract)
             return;
 
-        _audioPlayer.loop = false;
-        _audioPlayer.Stop();
+        //_audioPlayer.loop = false;
+        //_audioPlayer.Stop();
 
         var force = UnitVel * velocity;
         force.z *= -1.5f;
@@ -186,10 +185,15 @@ public class Die : MonoBehaviour
         letGo = true;
     }
 
+    private float _minBounceInterval = 0.3f;
+    private float _lastBounce = 0;
+
     void OnCollisionEnter(Collision col)
     {
-        Debug.Log("Bounc");
-        _audioPlayer.Stop();
+        float now = Time.time;
+        if (now - _lastBounce < _minBounceInterval)
+            return;
+        _lastBounce = now;
         _audioPlayer.PlayOneShot(BounceClip);
     }
 

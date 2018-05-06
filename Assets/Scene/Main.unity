@@ -1101,7 +1101,7 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 345472137}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 1392445389, guid: f70555f144d8491a825f0804e09c671c, type: 3}
   m_Name: 
@@ -1133,7 +1133,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 345472140}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 462636515}
+        m_MethodName: BackgroundPressed
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &345472140
@@ -2793,8 +2804,9 @@ MonoBehaviour:
   Score1: {fileID: 1026256790}
   Score2: {fileID: 2024576998}
   MusicText: {fileID: 1756404600}
-  Music: {fileID: 8300000, guid: f784eb3749e76cd4d9c8d3b5e05cf7be, type: 3}
-  Menu: {fileID: 8300000, guid: 4bf34c1c7a18ed745a09d03f7370d83f, type: 3}
+  MusicClip: {fileID: 8300000, guid: f784eb3749e76cd4d9c8d3b5e05cf7be, type: 3}
+  MenuClip: {fileID: 8300000, guid: 4bf34c1c7a18ed745a09d03f7370d83f, type: 3}
+  IntroClip: {fileID: 8300000, guid: d761b2ee60db69c46a44fdabbc5b914d, type: 3}
 --- !u!82 &981169183
 AudioSource:
   m_ObjectHideFlags: 0
@@ -5111,7 +5123,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 0
@@ -5210,9 +5222,9 @@ MonoBehaviour:
   UnitVel: 1200
   MaxMagnitude: 100000
   MinMagnitude: 10000
-  BounceClip: {fileID: 0}
+  BounceClip: {fileID: 8300000, guid: 04a215c348fed37499e5ddcf5e4512a7, type: 3}
   ShakingClip: {fileID: 8300000, guid: a1faaf5126885e340a35f1ea7511e53d, type: 3}
-  FinishedClip: {fileID: 0}
+  FinishedClip: {fileID: 8300000, guid: 495e83f99bbd4954095f295bbcc490d7, type: 3}
 --- !u!54 &1846878056
 Rigidbody:
   m_ObjectHideFlags: 0

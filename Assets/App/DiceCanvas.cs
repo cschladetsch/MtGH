@@ -12,6 +12,12 @@ class DiceCanvas : MonoBehaviour
 
     public void BackgroundPressed()
     {
+        if (!_done)
+            return;
+
+        gameObject.SetActive(false);
+        _finished(_result);
+        _finished = null;
     }
 
     public void Reset()
@@ -28,10 +34,11 @@ class DiceCanvas : MonoBehaviour
 
     void Done(int result)
     {
-        gameObject.SetActive(false);
-        _finished(result);
-        _finished = null;
+        _done = true;
+        _result = result;
     }
 
     private Action<int> _finished;
+    private int _result;
+    private bool _done;
 }
